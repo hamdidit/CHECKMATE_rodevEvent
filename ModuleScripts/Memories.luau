@@ -5,6 +5,11 @@ memo.memory = {
 		,name="This is a test!"
 		,desc=`hi, im going to Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem placerat mattis lacinia, ipsum metus dictum ante, vitae tempor metus massa id urna. Aliquam libero ligula, aliquet dignissim aliquet ut, facilisis vel dui. Donec in finibus risus, eu pharetra odio. Nunc varius odio eu erat efficitur consectetur. Praesent viverra turpis in ligula fermentum, id ullamcorper ligula feugiat. Nunc tortor ipsum, malesuada a mauris at, vulputate pulvinar lacus.`
 	},
+	['...']={
+		img=""
+		,name="empty..."
+		,desc=`...`
+	},
 	whiteking={
 		img=""
 		,name="I am white's king"
@@ -65,6 +70,11 @@ memo.memory = {
 		,name='i still see her...'
 		,desc='i thought drinking would make it go away'
 	},
+	killpattern={
+		img = ""
+		,name=`Black king's kill signature`
+		,desc=`Black king always cuts off his vicims upon killing them, is it some sort of intimidation or punishment?`
+	},
 
 	bbbb={
 		img=""
@@ -74,7 +84,11 @@ memo.memory = {
 }
 memo.combination={
 	queenfamily			= {'notokfamily', 'herfamily'},
-	falseaccusation		= {'wkingkill', 'queenfamily'},
+	falseaccusation1		= {'wkingkill', 'notokfamily'},
+	falseaccusation2		= {'wkingkill', 'herfamily'},
+	falseaccusation3		= {'wkingkill', 'queenfamily'},
+	killpattern1		= {'blackking', 'herfamily'},
+	killpattern2		= {'blackking', 'queenfamily'},
 	kinglie							= {'falseaccusation', 'blackking'},
 }
 
