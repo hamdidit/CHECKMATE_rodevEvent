@@ -3,11 +3,12 @@
 (yes thats the name of my game)
 
 ## where the script is placed
-### clickydetectory
+clickydetectory
 <img width="146" height="147" alt="image" src="https://github.com/user-attachments/assets/1e884845-7e0e-49e3-9b50-72cc1b9540a3" />
-### modulerscripty
+<br>
+modulerscripty
 <img width="246" height="170" alt="image" src="https://github.com/user-attachments/assets/c30c362a-d428-4408-9a92-ae30cb4a3a50" />
-### the other handlerl
+<br>the other handlerl
 <img width="207" height="241" alt="image" src="https://github.com/user-attachments/assets/ed4bff9a-2ab7-4055-addf-ed8ca1ae5ed3" />
 
 
