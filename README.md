@@ -1,3 +1,18 @@
+
+# LIKE A CHESS PIECE
+(yes thats the name of my game)
+
+## where the script is placed
+### clickydetectory
+<img width="146" height="147" alt="image" src="https://github.com/user-attachments/assets/1e884845-7e0e-49e3-9b50-72cc1b9540a3" />
+### modulerscripty
+<img width="246" height="170" alt="image" src="https://github.com/user-attachments/assets/c30c362a-d428-4408-9a92-ae30cb4a3a50" />
+### the other handlerl
+<img width="207" height="241" alt="image" src="https://github.com/user-attachments/assets/ed4bff9a-2ab7-4055-addf-ed8ca1ae5ed3" />
+
+
+
+## documentation (doesn't actually need one but i wanted to)
 <img width="1015" height="423" alt="RobloxScreenShot20260823_122249156" src="https://github.com/user-attachments/assets/468f6d19-471f-410c-9bb1-d554b3a9e393" />
 <img width="1015" height="548" alt="RobloxScreenShot20260823_110827895" src="https://github.com/user-attachments/assets/27f7ea14-149c-41c8-a369-76217a07f9f6" />
 <img width="1015" height="528" alt="RobloxScreenShot20260823_071034221" src="https://github.com/user-attachments/assets/eaf59658-2e9b-44c4-9fd7-118034461ff2" />
