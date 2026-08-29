@@ -18,6 +18,7 @@ local  CONFIG=require(game.ReplicatedStorage.Modules.Stats)
 local  MEmRY=require(game.ReplicatedStorage.Modules.Memories)
 
 local ALREADYquestioned={}
+local CUTSSCENE={}
 --local nodeaaf={"herfamily" ,'kinglie'}
 
 -- they.. talk?!?!
@@ -38,7 +39,9 @@ end
 function getmemo():string
 	GUI.START.MemoryFrame.Visible=true
 	GUI.START.MemoryFrame.Details.interact:SetAttribute('vis',true)
+	GUI.START.MemoryButton.BackgroundColor3=Color3.new(1,1,0)
 	local MEMO=BindEvent.UseMemory.Event:Wait()
+	GUI.START.MemoryButton.BackgroundColor3=Color3.new(1,1,1)
 
 	GUI.START.MemoryFrame.Details.interact:SetAttribute('vis',false)
 	return MEMO
@@ -52,7 +55,7 @@ function ADDanger(add:number)
 	CONFIG.Patient=math.min(add+CONFIG.Patient,CONFIG._PatientMax)
 	print(CONFIG.Patient)
 	if CONFIG.Patient<=CONFIG._PatientSnap then---ooh angry!
-		cc.Initiate('oohshemad')
+		 return CUTSSCENE.oohshemad()
 	end
 
 	if CONFIG.Patient<=CONFIG._PatientSnap+1 then
@@ -134,6 +137,8 @@ function RESET()
 	memorybuton.Visible=false
 	Characters:WaitForChild('RUNNINGplayer'):PivotTo(Pathh:WaitForChild('run0').CFrame)
 	Characters:WaitForChild('RUNNINGdude'):PivotTo(Pathh:WaitForChild('run0').CFrame)
+	game.Lighting.Atmosphere.Density=0.5
+	game.Lighting.Atmosphere.Density=.5
 
 	doanim(Queen, 'bq_chill','play')
 	doanim(Queen, 'bq_idle','play')
@@ -152,7 +157,6 @@ end
 
 RESET()
 cc={Current="",}
-local CUTSSCENE={}
 cc.Cutscene = CUTSSCENE
 
 function CUTSSCENE.Start()
@@ -239,6 +243,9 @@ function CUTSSCENE.	ALMOSTstart()
 	DoDialogue(`wking`,`....{oohyellow('you')}`)
 	addmemo('blackqueen') 
 
+	task.delay(1.13,function() ---oooooh magic number ooooh
+		hershotgun:WaitForChild('PumpSound'):Play()
+	end)
 	doanim(Queen,'bq_NOchill','play')
 	task.wait(.1)
 	doanim(Queen,'bq_chill','stop')
@@ -254,6 +261,7 @@ function CUTSSCENE.	ALMOSTstart()
 
 	DoDialogue(`bqueen`, `no reinforcements are coming`)
 	DoDialogue(`bqueen`, `surrender... or become {oohyellow("a dead piece")}`)
+	addmemo('shemad')
 	setface(King,'scared')
 	addmemo('intenttokill')
 
@@ -271,12 +279,13 @@ end
 
 function CUTSSCENE.questionSTART()  
 	SetCam(Cams:WaitForChild(`startgame`).CFrame)
-	DoDialogue(`wking`,`(maybe ill start by asking her why she's trying to killing me)`)
+	--DoDialogue(`wking`,`(maybe ill start by asking her why she's trying to killing me)`)
 	DoDialogue(`wking`,`can i..`)
 	DoDialogue(`wking`,`ask you something before you do anything?`)
 	DoDialogue(`bqueen`,`make it quick`)
 
-	cc.Initiate('questionLoop')
+	cc.Initiate('whykillme')
+	--cc.Initiate('questionLoop')
 end
 
 
@@ -348,21 +357,21 @@ function CUTSSCENE.questionLoop()
 			DoDialogue('bqueen',`...`) 
 		else
 			DoDialogue('bqueen',`dont you dare`) 
+			if ADDanger(1) then return end 
 			DoDialogue('bqueen',`you know nothing`) 
-			ADDanger(1)
 		end
-	elseif memo=='kinglie' then
+	elseif memo=='kinglie'  or memo=='killpattern' then
 		--DoDialogue(`wking`,`about {oohyellow('him')}`) 
 		cc.Initiate('kinglie')
 		return
 	elseif memo=='intenttokill' then
-		if not ISRepeated then
-			cc.Initiate('whykillme')
-		else
+		--if not ISRepeated then
+		--	cc.Initiate('whykillme')
+		--else
 			DoDialogue(`bqueen`,`first, king's order. second, you killed people`) 
-			DoDialogue(`bqueen`,`stop asking that`) 
-			ADDanger(1)
-		end
+			if ADDanger(1) then return end 
+			DoDialogue(`bqueen`,`stop asking that`)  
+		--end
 
 	elseif memo=="whiteking" then
 
@@ -372,9 +381,10 @@ function CUTSSCENE.questionLoop()
 			DoDialogue(`wking`,`N- no, i just wanted to make sure`) 
 			DoDialogue(`bqueen`,`..You are my enemy`) 
 		else
-			DoDialogue(`wking`,`N- no, i just want-`)  
+			DoDialogue(`wking`,`N- no, i just want t-`)  
 			DoDialogue(`bqueen`,`i can press this trigger and kill you right now`) 
-			ADDanger(1)
+			if ADDanger(1) then return end 
+			DoDialogue(`wking`,`.... sorry`)  
 		end
 	elseif memo=="blackqueen" then
 
@@ -401,7 +411,7 @@ function CUTSSCENE.questionLoop()
 			ADDanger(1)
 		end
 
-	elseif memo=="wkingkill" then -- another branch!11
+	elseif memo=="wkingkill" or memo=='falseaccusation' then -- another branch!11
 
 		DoDialogue(`wking`,`i didn't kill anyone for fun`) 
 		DoDialogue(`wking`,`only who attack first`) 
@@ -417,6 +427,17 @@ function CUTSSCENE.questionLoop()
 			ADDanger(1)
 		end
 
+	elseif memo=="sober" then
+ 
+		DoDialogue(`wking`,`i am currently cannot think straight`) 
+		if not ISRepeated then
+
+			DoDialogue(`bqueen`,`...what?`) 
+		else
+			DoDialogue(`bqueen`,`you are not funny`) 
+			ADDanger(1)
+
+		end
 	elseif memo=="aaaaaaaa" then
 
 		DoDialogue(`bqueen`,`bcbcbcbcb`) 
@@ -433,7 +454,7 @@ function CUTSSCENE.questionLoop()
 	else
 
 
-		DoDialogue('wking',`do you know anything about "{MEmRY[memo].name }?"`) 
+		DoDialogue('wking',`do you know anything about "{MEmRY.memory[memo].name }?"`) 
 		DoDialogue('bqueen',`..and what do you mean by that`) 
 		DoDialogue('wking',`i honestly dont know`) 
 		DoDialogue('wking',`it just came up on my mi-`) 
@@ -452,38 +473,44 @@ function CUTSSCENE.kinglie()
 	SetCam(Cams:WaitForChild(`startgame`).CFrame)
 	DoDialogue(`wking`,`it seems that your king is lying about everything you knew.`) 
 	DoDialogue('bqueen',`and what makes you say that?`) 
+	DoDialogue('bqueen',`what is he possibly lying about?`) 
 
 	local memo = getmemo()
 	if memo ~= 'queenfamily' then
-		cc.Initiate('notmakesense')
 		DoDialogue('bqueen',`nothing? that's convinient`) 
 		ADDanger(1)
 		cc.Initiate('questionLoop')
 		return true
 	end
 	DoDialogue(`wking`,`your family.`) 
-	DoDialogue('bqueen',`...`)  
-
+	DoDialogue('bqueen',`...no`)  
+	DoDialogue('bqueen',`...\n you're lying`)  
+	DoDialogue('bqueen',`you dont even have any proof of that`)  
+	DoDialogue('bqueen',`i've know him for years`)  
+	--DoDialogue(`wking`,`(she might  )`) 
 
 	--another gate
 	memo = getmemo()
 	if memo ~= 'killpattern' then 
 		DoDialogue('bqueen',`you're playing with my feeling`) 
-		DoDialogue('bqueen',`stop that`) 
+		DoDialogue('bqueen',`...stop that`) 
 		ADDanger(1)
 		cc.Initiate('questionLoop')
 		return true
 	end
+	game.Lighting.Atmosphere.Density=0
+	SetCam(Cams.deadfamily.CFrame)
 	DoDialogue(`wking`,`do you know what happen to their body?`) 
 	DoDialogue('bqueen',`...`)  
 	DoDialogue(`wking`,`do one of their hand have no fingers?`) 
 	DoDialogue('bqueen',`...yes`)  
-	DoDialogue(`wking`,`and where do you last time remember`) 
+	DoDialogue(`wking`,`and did  you  remember`) 
+	SetCam(Cams.deadfamilyclose.CFrame)
 	DoDialogue(`wking`,`who always does that to a corpse?`) 
 	DoDialogue('bqueen',`...`)  
-	DoDialogue('bqueen',`him`)  
-	DoDialogue('bqueen',`but`)  
-	DoDialogue('bqueen',`he's not there when i see it`)  
+	DoDialogue('bqueen',`him..  `)  
+	DoDialogue('bqueen',`but, he's not there when i see it`)  
+	SetCam(Cams.lookatkillerking.CFrame)
 	DoDialogue(`wking`,`maybe because you got there before he can dispose it?`) 
 	DoDialogue('bqueen',`...`)  
 
@@ -529,9 +556,10 @@ function CUTSSCENE.oohshemad()
 
 	DoDialogue('wking',`i, dont have any... more.`)
 	DoDialogue('bqueen',`that saves me time`)
-	
+
 	cc.Initiate('heDIE')
 	--wking die!
+	return true
 
 end
 
@@ -541,7 +569,9 @@ function CUTSSCENE.heDIE()
 	hershotgun.light.Transparency=0	
 	hershotgun.light.light2.Transparency=.7
 	hershotgun.light.PointLight.Enabled=true	
+	hershotgun:WaitForChild('FireSound'):Play()
 	task.wait(.5)
+	hershotgun:WaitForChild('FireSound'):Stop()
 	SetCam(Cams.dudepov.CFrame)
 	script["City Night Ambience 3 (SFX)"]:Stop() --bg noise
 	DoDialogue(`player`,`wait no`)
@@ -550,7 +580,7 @@ function CUTSSCENE.heDIE()
 	DoDialogue(`player`,`okay where do i st-`)
 	DoDialogue(`dude`,`HEY!`)
 	DoDialogue(`player`,`what?`)
-CUTSSCENE.run()
+	CUTSSCENE.run()
 end
 
 --sober sober
@@ -566,6 +596,7 @@ function CUTSSCENE.empathcuzshedie()
 	DoDialogue('wking',`(...)`)
 	DoDialogue('wking',`white's queen\n she's...\n i can't.. why didn't i..`)
 	DoDialogue('wking',`...`)
+	SetCam(Cams.startgame.CFrame)
 	DoDialogue('bqueen',`...`) -- ps: she know that wking's wife is dead, just being cold and all :)
 
 
@@ -581,8 +612,10 @@ end
 
 function CUTSSCENE.almostend() 
 	memorybuton.Visible = false
+	game.Lighting.Atmosphere.Density=0.5
 	SetCam(Cams:WaitForChild(`startgame`).CFrame)
 	--King:PivotTo(Pathh.look.CFrame)
+	ADDanger(-3)
 	DoDialogue('bqueen',`get out.`) 
 	DoDialogue('bqueen',`Just... get out of my sight`) 
 
@@ -591,7 +624,7 @@ function CUTSSCENE.almostend()
 	MoveTo(King,Pathh.farther1.Position,true)
 	task.wait(1)
 	SetCam(Cams:WaitForChild(`kinggoes`).CFrame)
-task.wait(1)
+	task.wait(1)
 	King:PivotTo(King:GetPivot()*CFrame.Angles(0,math.rad(180),0))--spin
 	task.wait(2) -- stare back
 	DoDialogue('wking',`...`) 
