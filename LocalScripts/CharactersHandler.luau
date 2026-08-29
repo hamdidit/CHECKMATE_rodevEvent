@@ -10,7 +10,10 @@ function PlayAnimation(Char,id,cmd)
 	if not Anim then return end
 
 	if cmd=='play' then
-		Anim:Play()
+		if not Anim.Looped or not Anim.IsPlaying then
+			Anim:Play()
+		end
+		
 	elseif cmd=='stop' then
 		Anim:Stop()
 	end
@@ -39,20 +42,20 @@ function add(Char:Model)
 		Animations['idle']:Play()
 	end
 
-	Humanoid.Running:Connect(function(s)
-		if s>0 then
-			if not Animations.walk.IsPlaying  then
-				Animations['walk']:Play()
-			end
+	--Humanoid.Running:Connect(function(s)
+	--	if s>0 then
+	--		if not Animations.walk.IsPlaying  then
+	--			Animations['walk']:Play()
+	--		end
 			
-		else
+	--	else
 
-			if Animations['walk'].IsPlaying then
-				Animations['walk']:Stop ()
-			end
-		end
+	--		if Animations['walk'].IsPlaying then
+	--			Animations['walk']:Stop ()
+	--		end
+	--	end
 
-	end)
+	--end)
 	Characters[Char]=Animations
 	
 	if Char:HasTag('sit') then
