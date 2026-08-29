@@ -115,7 +115,7 @@ function DialogueStart(IDApperance:string,text:string,rig:Model?)
 			mouthtalk(true)
 			game.Debris:AddItem(s,s.TimeLength+1)
 		end
-		
+
 		--too long, get skippped
 		if lastskip~=SKIP then
 			TextLabel.MaxVisibleGraphemes=-1 --show the full thingy
@@ -150,8 +150,9 @@ function DialogueStart(IDApperance:string,text:string,rig:Model?)
 end
 
 DialogueStart() -- hide the ui!
-Parent.Visible=true
-
+task.delay(1,function()
+	Parent.Visible=true
+end)
 Parent:WaitForChild('SKIP').Activated:Connect(function()
 	SKIP=tick()
 end)
