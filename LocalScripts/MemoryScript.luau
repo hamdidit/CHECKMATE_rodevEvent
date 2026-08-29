@@ -48,8 +48,8 @@ function TRUEreset()
 	combinedmemory={}
 	NewStuff=0
 	GETMEMOS={}
-	AddMemory('...')
-	--IMPORTANT=false
+	--AddMemory('...')
+	IMPORTANT=false
 end
 
 
@@ -69,6 +69,7 @@ function AddMemory(index)
 		IMPORTANT=false
 	elseif IsMemory.type=='note' then
 		FRAME.txt.Text=`[note] {IsMemory.name}`
+		FRAME.LayoutOrder=0
 	else
 		idk()
 	end
@@ -102,12 +103,37 @@ function AddMemory(index)
 			uistr.Color=Color3.new(0,0,0)
 		end
 	end
+
+	local function resetcombiner()
+		--print(combinedmemory)
+		for _,chilldren in memcontainers:GetChildren() do
+			local combineframe:Frame=chilldren:FindFirstChild('combine')
+
+			if not combineframe then continue end
+			combineframe.Visible=true
+
+			if chilldren==FRAME then combineframe.Visible=false continue end
+
+			if not (MemMod.memory[chilldren.Name].type=="" and IsMemory.type=="") then combineframe.Visible=false continue end
+			
+			for _,get in combinedmemory do
+				if  table.find(get,current)  and table.find(get,chilldren.Name)  then
+					combineframe.Visible=false
+					break
+					
+				end
+			end
+			
+			if not combineframe.Visible then continue end
+		end 
+	end
+
 	resetthestroke()
 	stockreseter[#stockreseter+1]=resetthestroke
-	MemoButton.TextLabel.Text=NewStuff
-	FRAME:SetAttribute('id',index)
+	MemoButton.TextLabel.Text=NewStuff 
 	local conn={}
 	conn[#conn+1]=FRAME.Activated:Connect(function()
+		script.UI_3_Clicks_02_Hover:Play()
 		resetthestroke()
 		if current==index then
 			reset()
@@ -127,65 +153,35 @@ function AddMemory(index)
 			v()
 		end
 
-		for _,chilldren in memcontainers:GetChildren() do
-			local combineframe:Frame=chilldren:FindFirstChild('combine')
-			if chilldren==FRAME then
-				combineframe.Visible=false
-				continue end
-
-			if combineframe then
-				local visible=true
-				for _,get in combinedmemory do
-					if  table.find(get,index)  and table.find(get,chilldren:GetAttribute('id'))  then
-						visible=false
-						break
-					end
-				end
-				combineframe.Visible=visible
-			end
-		end 
+		resetcombiner()
 	end)
 
 	conn[#conn+1]=FRAME.combine.t.Activated:Connect(function()
 		if current=="" or current==index then return end
+		local gotit=false
 		table.insert(combinedmemory,{index,current})
 		for i:string,comb in MemMod.combination do
 			if table.find(comb,current) and table.find(comb,index) then
-				if AddMemory(i:gsub('%d','')) then
-					script.Correct:Play()
-					return
-				else
-					break
-				end
+				gotit= AddMemory(i:gsub('%d','')) 
+
+				break
 			end
 		end
 
 
-		--FAILED!
+		if gotit then
+			script.Correct:Play() 
+		else
+			--FAILED!
+			script.Wrong:Play()					
+		end
 
-		for _,chilldren in memcontainers:GetChildren() do
-			local combineframe:Frame=chilldren:FindFirstChild('combine')
-			if chilldren==FRAME then
-				combineframe.Visible=false
-				continue end
+		resetcombiner()
 
-			if combineframe then
-				local visible=true
-				for _,get in combinedmemory do
-					if  table.find(get,index)  and table.find(get,chilldren:GetAttribute('id'))  then
-						visible=false
-						break
-					end
-				end
-				combineframe.Visible=visible
-			end
-		end 
-
-
-		script.Wrong:Play()					
 	end)	
 
 	conn[#conn+1]=FRAME.MouseEnter:Connect(function()
+		script["ui-simple-button-click"]:Play()
 		hovery=true
 		resetthestroke()
 	end)
@@ -202,6 +198,7 @@ function AddMemory(index)
 
 	return true
 end
+
 function idk()
 	local check1={'notokfamily','herfamily','wkingkill','blackking'}
 	local check2={'queenfamily','falseaccusation','killpattern','kinglie'}
