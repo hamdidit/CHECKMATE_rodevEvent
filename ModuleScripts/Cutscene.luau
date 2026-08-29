@@ -313,7 +313,7 @@ function CUTSSCENE.Loopstart()
 	DoDialogue(`wking`,`(thats a lot of info, i might need a lot more than that)`) 
 	DoDialogue(`wking`,`(i'll ask some more question then)`) 
 	--DoDialogue(`wking`,`can i ask you about`) 
-	--cc.Initiate('questionLoop')
+	cc.Initiate('questionLoop')
 end
 
 -- hint hint wink wink
