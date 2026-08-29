@@ -8,17 +8,23 @@ local GUI=game.Players.LocalPlayer.PlayerGui
 local memorybuton=GUI:WaitForChild('START'):WaitForChild('MemoryButton')
 local BindEvent=game.ReplicatedStorage:WaitForChild('Event')
 
+local King=Characters:WaitForChild('King')
+local Queen=Characters:WaitForChild('Queen')
+local hershotgun=Queen:WaitForChild('Shotgun')
+
 local skipping=false
 local _DoDialogue=require(game.ReplicatedStorage.Modules.Dialogues)
 local  CONFIG=require(game.ReplicatedStorage.Modules.Stats)
+local  MEmRY=require(game.ReplicatedStorage.Modules.Memories)
 
 local ALREADYquestioned={}
 --local nodeaaf={"herfamily" ,'kinglie'}
 
+-- they.. talk?!?!
 function DoDialogue(id,txt)
 	id=id or 'plr'
-	local rig=(id=="wking" and Characters.King)
-		or (id=='bqueen' and Characters.Queen) or nil
+	local rig=(id=="wking" and King)
+		or (id=='bqueen' and Queen) or nil
 	_DoDialogue(id,txt,rig)
 end
 
@@ -48,6 +54,12 @@ function ADDanger(add:number)
 	if CONFIG.Patient<=CONFIG._PatientSnap then---ooh angry!
 		cc.Initiate('oohshemad')
 	end
+
+	if CONFIG.Patient<=CONFIG._PatientSnap+1 then
+		doanim(Queen,'bq_angry','play')
+	else
+		doanim(Queen,'bq_angry','stop')
+	end
 end
 
 function LookAt(part:Part,CF)
@@ -68,9 +80,16 @@ function MoveTo(rig:Model,position,WAT)
 
 	local Humanoid=rig:FindFirstChildWhichIsA(`Humanoid`)
 	Humanoid:MoveTo(position)
-	--doanim(rig,'walk','play')
+	doanim(rig,'walk','play')
+
 	if WAT then
 		Humanoid.MoveToFinished:Wait()
+		doanim(rig,'walk','stop')
+	else
+		task.spawn(function()
+			Humanoid.MoveToFinished:Wait()
+			doanim(rig,'walk','stop')
+		end)
 	end
 	--doanim(rig,'walk','stop')
 end
@@ -84,7 +103,7 @@ function setface(rig:Model,facename)
 		warn('no rig')
 		return
 	end
-	
+
 	local Head=rig:WaitForChild('Head')
 	if not Head then
 		warn('no head')
@@ -104,21 +123,35 @@ end
 function RESET()
 	TIMEtextlabel.TextTransparency=0
 	TIMEtextlabel.BackgroundTransparency=0.65
-	Characters:WaitForChild('King'):PivotTo(workspace.Path:WaitForChild('verystart').CFrame)
-	Characters:WaitForChild('Queen'):PivotTo(workspace.Path:WaitForChild('chilling').CFrame)
-	ChessBoardBlack:WaitForChild('Queen').CFrame=workspace.ChessBoard.Black:WaitForChild('FromQueen').CFrame
+	King:PivotTo(Pathh:WaitForChild('verystart').CFrame)
+	Queen:WaitForChild('HumanoidRootPart'):PivotTo(Pathh:WaitForChild('chilling').CFrame)-- WHY WONT YOU GO THERE
+	Queen:WaitForChild('HumanoidRootPart'):PivotTo(Pathh:WaitForChild('chilling').CFrame)-- WHY WONT YOU GO THERE
+	Queen:WaitForChild('HumanoidRootPart'):PivotTo(Pathh:WaitForChild('chilling').CFrame)-- WHY WONT YOU GO THERE
+	Queen:WaitForChild('HumanoidRootPart'):PivotTo(Pathh:WaitForChild('chilling').CFrame)-- WHY WONT YOU GO THERE
+	Queen:WaitForChild('HumanoidRootPart'):PivotTo(Pathh:WaitForChild('chilling').CFrame)-- WHY WONT YOU GO THERE
+	ChessBoardBlack:WaitForChild('Queen').CFrame=ChessBoardBlack:WaitForChild('FromQueen').CFrame
 	workspace:WaitForChild('ATTAAAAAACK').Transparency=1
 	memorybuton.Visible=false
+	Characters:WaitForChild('RUNNINGplayer'):PivotTo(Pathh:WaitForChild('run0').CFrame)
+	Characters:WaitForChild('RUNNINGdude'):PivotTo(Pathh:WaitForChild('run0').CFrame)
 
-	Characters.King:WaitForChild('Head'):WaitForChild('scared').Transparency=1
-	Characters.King.Head:WaitForChild('scaredidle').Transparency=1
-	Characters.King.Head:WaitForChild('sad').Transparency=0
+	doanim(Queen, 'bq_chill','play')
+	doanim(Queen, 'bq_idle','play')
+	doanim(Queen, 'idle','stop')
+	doanim(Queen,'bq_angry','stop')
 
-	CONFIG.Patient=CONFIG._Patient
+	King:WaitForChild('Head'):WaitForChild('scared').Transparency=1
+	King.Head:WaitForChild('scaredidle').Transparency=1
+	King.Head:WaitForChild('sad').Transparency=0
+	hershotgun:WaitForChild('light').Transparency=1
+	hershotgun.light:WaitForChild('light2').Transparency=1
+	hershotgun.light:WaitForChild('PointLight').Enabled=false
+
+	CONFIG.Patient=CONFIG._Patient 
 end
 
 RESET()
-cc={}
+cc={Current="",}
 local CUTSSCENE={}
 cc.Cutscene = CUTSSCENE
 
@@ -172,17 +205,14 @@ function CUTSSCENE.	ALMOSTstart()
 	script["City Night Ambience 3 (SFX)"]:Play() --bg noise
 	SetCam(Cams:WaitForChild(`START`).CFrame)
 	--uhhh show the location and time
-	doanim(Characters.Queen, 'bq_chill','play')
-	doanim(Characters.Queen, 'bq_idle','play')
-	doanim(Characters.Queen, 'idle','stop')
 	task.wait(5)
 	TIMEtextlabel.Transparency=1
 
 	SetCam(Cams:WaitForChild(`INSIDE`).CFrame)
 	task.wait(2)
-	MoveTo(Characters.King,Pathh:WaitForChild('almoststart').Position,true)
+	MoveTo(King,Pathh:WaitForChild('almoststart').Position,true)
 	task.wait(.5)
-	MoveTo(Characters.King,Pathh:WaitForChild('start').Position,true)
+	MoveTo(King,Pathh:WaitForChild('start').Position,true)
 	script.open:Play()
 	task.wait(.5)
 	SetCam(Cams:WaitForChild(`DOOR`).CFrame)
@@ -190,13 +220,13 @@ function CUTSSCENE.	ALMOSTstart()
 	--task.wait(2)
 
 	-- white king open the door and walking out
-	MoveTo(Characters.King,Pathh.ends.Position,true)				
+	MoveTo(King,Pathh.ends.Position,true)				
 	script.close:Play()
 	task.wait(1)
-	MoveTo(Characters.King,Pathh.look.Position,true)
+	MoveTo(King,Pathh.look.Position,true)
 	task.wait(.5)
 	-- white king stops in place, shocked about something
-	setface(Characters.King,'scaredidle')
+	setface(King,'scaredidle')
 	task.wait(2)
 	DoDialogue(`wking`,`...who\n are you?`) 
 	SetCam(Cams:WaitForChild(`lookqueen`).CFrame)
@@ -209,30 +239,31 @@ function CUTSSCENE.	ALMOSTstart()
 	DoDialogue(`wking`,`....{oohyellow('you')}`)
 	addmemo('blackqueen') 
 
-	doanim(Characters.Queen,'bq_NOchill','play')
+	doanim(Queen,'bq_NOchill','play')
 	task.wait(.1)
-	doanim(Characters.Queen,'bq_chill','stop')
+	doanim(Queen,'bq_chill','stop')
 
 	DoDialogue(`bqueen`, `the reign of the {oohyellow("White King")} ends here`)
 	DoDialogue(`bqueen`, `you have nowhere left to run`)
-	doanim(Characters.Queen, 'bq_NOchill', 'stop')
+	doanim(Queen, 'bq_NOchill', 'stop')
 	addmemo('whiteking')
 
 	-- she's  closer
-	MoveTo(Characters.Queen,Pathh.shecloser.Position)
+	MoveTo(Queen,Pathh.shecloser.Position)
 	SetCam(Cams:WaitForChild(`startgame`).CFrame)
 
 	DoDialogue(`bqueen`, `no reinforcements are coming`)
 	DoDialogue(`bqueen`, `surrender... or become {oohyellow("a dead piece")}`)
-	setface(Characters.King,'scared')
+	setface(King,'scared')
 	addmemo('intenttokill')
 
 	DoDialogue(`wking`, `(why {oohyellow("now")} of all times...?)`)
 	addmemo('sober')
 
-	setface(Characters.King,'scaredidle')
+	setface(King,'scaredidle')
 	memorybuton.Visible = true
-	DoDialogue(`wking`, `(i need to use my memories. \nQuestion everything she said... and connect them logicly)`)
+	DoDialogue(`wking`, `(i need to use my memories. \nQuestion everything she said... and {oohyellow("connect")} them logicly)`)
+	addmemo('combine')
 	DoDialogue(`wking`, `(it's the only way out of this)`)
 
 	cc.Initiate('questionSTART')--start it!
@@ -276,9 +307,18 @@ function CUTSSCENE.Loopstart()
 	--cc.Initiate('questionLoop')
 end
 
+-- hint hint wink wink
+
 -- question goes on and on and on
 function CUTSSCENE.questionLoop()
+	if CONFIG.Patient<=CONFIG._PatientSnap then
+		-- bro dead
+		return
+	end
 	SetCam(Cams:WaitForChild(`startgame`).CFrame)
+
+
+	DoDialogue('wking','...')
 	local memo=getmemo()
 	local ISRepeated=table.find(ALREADYquestioned,memo)~=nil
 
@@ -288,9 +328,6 @@ function CUTSSCENE.questionLoop()
 		table.insert(ALREADYquestioned,memo)
 	end
 
-	if memo=="wkingkill" then
-
-	end
 
 
 	if memo=="herfamily"  then
@@ -300,16 +337,20 @@ function CUTSSCENE.questionLoop()
 			DoDialogue('bqueen',`its.. none of your bussiness`) 
 			addmemo('notokfamily')
 			DoDialogue(`wking`,`(well that didnt answer anything)`) 
+			CUTSSCENE.gotit()
 		end
 	elseif memo=='notokfamily' then
 		DoDialogue('wking',`(i shouldn't asked her this)`) 
 	elseif memo=="queenfamily" then
 		DoDialogue(`wking`,`do you meant by "her family"`) 
 		DoDialogue(`wking`,`is it yours?`) 
-		DoDialogue('bqueen',`dont you dare`) 
-		DoDialogue('bqueen',`you know nothing`) 
-		ADDanger(1)
-
+		if not ISRepeated then
+			DoDialogue('bqueen',`...`) 
+		else
+			DoDialogue('bqueen',`dont you dare`) 
+			DoDialogue('bqueen',`you know nothing`) 
+			ADDanger(1)
+		end
 	elseif memo=='kinglie' then
 		--DoDialogue(`wking`,`about {oohyellow('him')}`) 
 		cc.Initiate('kinglie')
@@ -323,13 +364,91 @@ function CUTSSCENE.questionLoop()
 			ADDanger(1)
 		end
 
-	else 
-		CUTSSCENE.notmakesense()
-	end
+	elseif memo=="whiteking" then
+
+		DoDialogue(`wking`,`Do you know who i am?`) 
+		DoDialogue(`bqueen`,`Are you threatening me?`) 
+		if not ISRepeated then
+			DoDialogue(`wking`,`N- no, i just wanted to make sure`) 
+			DoDialogue(`bqueen`,`..You are my enemy`) 
+		else
+			DoDialogue(`wking`,`N- no, i just want-`)  
+			DoDialogue(`bqueen`,`i can press this trigger and kill you right now`) 
+			ADDanger(1)
+		end
+	elseif memo=="blackqueen" then
+
+		DoDialogue(`wking`,`who are you?`) 
+		if not ISRepeated then
+
+			DoDialogue(`bqueen`,`why do you care about my name?`) 
+			DoDialogue(`bqueen`,`my name is not that important`) 
+		else
+			DoDialogue(`bqueen`,`... are you serious?`) 
+			ADDanger(1)
+
+		end
+	elseif memo=="blackking" then
+
+		DoDialogue(`wking`,`who's the black king`) 
+		if not ISRepeated then
+
+			DoDialogue(`bqueen`,`did you forgot who he is?`) 
+			DoDialogue(`bqueen`,`he is your enemy, the one who control the "black" group`) 
+			DoDialogue(`bqueen`,`the group that's your opposing currently`) 
+		else
+			DoDialogue(`bqueen`,`... are you serious?`) 
+			ADDanger(1)
+		end
+
+	elseif memo=="wkingkill" then -- another branch!11
+
+		DoDialogue(`wking`,`i didn't kill anyone for fun`) 
+		DoDialogue(`wking`,`only who attack first`) 
+		DoDialogue(`bqueen`,`lie`) 
+		DoDialogue(`bqueen`,`you're talking nonsense`) 
+		DoDialogue(`wking`,`i can proof it`) 
+		memo=getmemo()
+		if memo=='kinglie' then
+			cc.Initiate('kinglie')
+		else
+			DoDialogue(`wking`,`...nevermind`) 
+			DoDialogue(`bqueen`,`that's what i thought`) 
+			ADDanger(1)
+		end
+
+	elseif memo=="aaaaaaaa" then
+
+		DoDialogue(`bqueen`,`bcbcbcbcb`) 
+		DoDialogue(`wking`,`adadad`) 
+		if not ISRepeated then
+
+		else
+
+		end
+		ADDanger(1)
+
+	elseif memo=="" then
+
+	else
+
+
+		DoDialogue('wking',`do you know anything about "{MEmRY[memo].name }?"`) 
+		DoDialogue('bqueen',`..and what do you mean by that`) 
+		DoDialogue('wking',`i honestly dont know`) 
+		DoDialogue('wking',`it just came up on my mi-`) 
+		ADDanger(1)
+		DoDialogue('bqueen',`stop joking around`) 
+
+	end 
 	cc.Initiate('questionLoop')
 end
+
+function CUTSSCENE.gotit()
+	DoDialogue('wking',`(i feel that's some important info from her )`)
+end
 --FINAL QUESTION!  
-function CUTSSCENE.kinglie()
+function CUTSSCENE.kinglie() 
 	SetCam(Cams:WaitForChild(`startgame`).CFrame)
 	DoDialogue(`wking`,`it seems that your king is lying about everything you knew.`) 
 	DoDialogue('bqueen',`and what makes you say that?`) 
@@ -338,31 +457,50 @@ function CUTSSCENE.kinglie()
 	if memo ~= 'queenfamily' then
 		cc.Initiate('notmakesense')
 		DoDialogue('bqueen',`nothing? that's convinient`) 
+		ADDanger(1)
 		cc.Initiate('questionLoop')
 		return true
 	end
+	DoDialogue(`wking`,`your family.`) 
+	DoDialogue('bqueen',`...`)  
 
 
 	--another gate
+	memo = getmemo()
+	if memo ~= 'killpattern' then 
+		DoDialogue('bqueen',`you're playing with my feeling`) 
+		DoDialogue('bqueen',`stop that`) 
+		ADDanger(1)
+		cc.Initiate('questionLoop')
+		return true
+	end
+	DoDialogue(`wking`,`do you know what happen to their body?`) 
+	DoDialogue('bqueen',`...`)  
+	DoDialogue(`wking`,`do one of their hand have no fingers?`) 
+	DoDialogue('bqueen',`...yes`)  
+	DoDialogue(`wking`,`and where do you last time remember`) 
+	DoDialogue(`wking`,`who always does that to a corpse?`) 
+	DoDialogue('bqueen',`...`)  
+	DoDialogue('bqueen',`him`)  
+	DoDialogue('bqueen',`but`)  
+	DoDialogue('bqueen',`he's not there when i see it`)  
+	DoDialogue(`wking`,`maybe because you got there before he can dispose it?`) 
+	DoDialogue('bqueen',`...`)  
 
-	DoDialogue('bqueen',`he...`)  
-	DoDialogue('bqueen',`told me it was you..`)  
+
+	--DoDialogue('bqueen',`he...`)  
+	--DoDialogue('bqueen',`told me it was you..`)  
 
 	cc.Initiate('almostend')
 end
 
--- for picking a not corelated memory!
-function CUTSSCENE.notmakesense() 
-	SetCam(Cams:WaitForChild(`toqueen`).CFrame)
-	DoDialogue('wking',`(that doesn't make sense to ask)`)
-	ADDanger(1)
-
-end 
 
 --will die if wrong
 function CUTSSCENE.oohshemad()
-	setface(Characters.King,'scared')
+	SetCam(Cams.startgame.CFrame)
 	DoDialogue('bqueen',`that's it`)
+	setface(King,'scared')
+	SetCam(Cams.queenpov.CFrame)
 	DoDialogue('bqueen',`any last word before i kill you?`)
 	local memo=getmemo()
 	local THEREISEXCUSES=table.find(noexcuses,memo)~=nil
@@ -382,28 +520,48 @@ function CUTSSCENE.oohshemad()
 	end
 
 	if THEREISEXCUSES then
-		DoDialogue('bqueen',`same excuses, you can't get me twice`)
+		--DoDialogue('bqueen',`same excuses, you can't get me twice`)
 	else
 		DoDialogue('wking',`(that almost got me killed)`)
+		setface(King,'scaredidle')
 		return
 	end
 
 	DoDialogue('wking',`i, dont have any... more.`)
 	DoDialogue('bqueen',`that saves me time`)
-
+	
+	cc.Initiate('heDIE')
 	--wking die!
 
 end
 
+function CUTSSCENE.heDIE()
+	memorybuton.Visible = false
+	SetCam(Cams.startgame.CFrame)
+	hershotgun.light.Transparency=0	
+	hershotgun.light.light2.Transparency=.7
+	hershotgun.light.PointLight.Enabled=true	
+	task.wait(.5)
+	SetCam(Cams.dudepov.CFrame)
+	script["City Night Ambience 3 (SFX)"]:Stop() --bg noise
+	DoDialogue(`player`,`wait no`)
+	DoDialogue(`player`,`that's not supposed to happen`)
+	DoDialogue(`dude`,`can't we just-`)
+	DoDialogue(`player`,`okay where do i st-`)
+	DoDialogue(`dude`,`HEY!`)
+	DoDialogue(`player`,`what?`)
+CUTSSCENE.run()
+end
+
 --sober sober
 function CUTSSCENE.empathcuzshedie()
-	setface(Characters.King,'scaredidle')
+	setface(King,'scaredidle')
 	DoDialogue('wking',`it's because i've been drinking a lot... recently`)
 	DoDialogue('wking',`trying to forget...`)
 	DoDialogue('wking',`(something came out from my mind, but its seems hard to speak about it )`)
 	DoDialogue('bqueen',`quit stalling`)
 	DoDialogue('wking',`her...`)
-	setface(Characters.King,'sad')
+	setface(King,'sad')
 	addmemo('whitequeen')
 	DoDialogue('wking',`(...)`)
 	DoDialogue('wking',`white's queen\n she's...\n i can't.. why didn't i..`)
@@ -422,19 +580,24 @@ function CUTSSCENE.empathcuzshedie()
 end
 
 function CUTSSCENE.almostend() 
+	memorybuton.Visible = false
 	SetCam(Cams:WaitForChild(`startgame`).CFrame)
+	--King:PivotTo(Pathh.look.CFrame)
 	DoDialogue('bqueen',`get out.`) 
 	DoDialogue('bqueen',`Just... get out of my sight`) 
 
 	-- king  walks away
-	SetCam(Cams:WaitForChild(`queenpov`).CFrame)
-	MoveTo(Characters.King,Pathh.farther1.Position,true)
-	Characters.King:PivotTo(Characters.King:GetPivot()*CFrame.Angles(0,math.rad(180),0))--spin
-	task.wait(5) -- stare back
+	SetCam(Cams:WaitForChild(`kinggoaway`).CFrame)
+	MoveTo(King,Pathh.farther1.Position,true)
+	task.wait(1)
+	SetCam(Cams:WaitForChild(`kinggoes`).CFrame)
+task.wait(1)
+	King:PivotTo(King:GetPivot()*CFrame.Angles(0,math.rad(180),0))--spin
+	task.wait(2) -- stare back
 	DoDialogue('wking',`...`) 
-	Characters.King:PivotTo(Characters.King:GetPivot()*CFrame.Angles(0,math.rad(180),0))--spin
+	King:PivotTo(CFrame.new(King:GetPivot().Position,Pathh.farther2.Position))--spin
 	task.wait(1) -- inhale
-	MoveTo(Characters.King,Pathh.farther2.Position)
+	MoveTo(King,Pathh.farther2.Position,true)
 
 
 	SetCam(Cams:WaitForChild(`toqueen`).CFrame)
@@ -449,16 +612,20 @@ function CUTSSCENE.ends()
 	script["City Night Ambience 3 (SFX)"]:Stop() --bg noise
 	SetCam(Cams.dudepov.CFrame)
 
-	DoDialogue(`player`,`and then the king is killed by his wife, the queen`)
+	DoDialogue(`player`,`and then the king is killed by his wife, and the queen finally avenged her family`)
 	SetCam(Cams.MyPov.CFrame)
 	DoDialogue(`dude`,`...`)
 	SetCam(Cams.dudepov.CFrame)
-	DoDialogue(`player`,`therefore i {oohyellow('win')}`)
+	DoDialogue(`player`,`your king died, therefore i {oohyellow('win')}`)
 	DoDialogue(`dude`,`...`)
 	SetCam(Cams.MyPov.CFrame)
 	DoDialogue(`dude`,`youre making stuff up`)
 	SetCam(Cams.dudepov.CFrame)
 	DoDialogue(`player`,`no`)
+	cc.Initiate('run')
+end
+
+function CUTSSCENE.run()
 	SetCam(Cams.MyPov.CFrame)
 	DoDialogue(`dude`,`deal is a deal`)
 	DoDialogue(`dude`,`now give me my 50$ for beating you`)
@@ -471,6 +638,7 @@ function CUTSSCENE.ends()
 	task.spawn(function()
 		MoveTo(Characters:WaitForChild('RUNNINGplayer'),Pathh.run1.Position,true)
 		MoveTo(Characters:WaitForChild('RUNNINGplayer'),Pathh.run2.Position,true)
+		MoveTo(Characters:WaitForChild('RUNNINGplayer'),Pathh.run3.Position,true)
 
 	end)
 	DoDialogue(`dude`,`wh-`) 
@@ -479,20 +647,34 @@ function CUTSSCENE.ends()
 	MoveTo(Characters:WaitForChild('RUNNINGdude'),Pathh.run1.Position,true)
 
 	SetCam(CFrame.new(0,0,0))
+	script.Restaurant:Stop()
 	workspace.CurrentCamera.CameraType=Enum.CameraType.Custom
 	DoDialogue('player','oh yea, thats where did i  hate that game from') 
+	if CONFIG.Patient<=CONFIG._PatientSnap then
+		DoDialogue('player',`but i feel like, i didn't have time to re explain the story`) 
+		DoDialogue('player',`maybe if i do that again without making the black queen upset?`) 
+		DoDialogue('player',`MAYBE he will understand`) 
+		DoDialogue('player',`..maybe`) 
+		DoDialogue('player',`...`) 
+		DoDialogue('player',`well i suppose i'll interact with the board  to do it again`) 
+	end
+	CONFIG.run=false
 	DoDialogue('',' ')  
+
+
 end
 
-
--- has literally 1 check to avoid nil :sog;
 function cc.Initiate(index)
+	if not CONFIG.run then
+		return
+	end
 	workspace.CurrentCamera.CameraType=Enum.CameraType.Scriptable
 	local Cutscene=cc.Cutscene[index]
 	if not Cutscene then
 		warn(`NO CUTSCENE WITH THE ID OF {index}`)
 		return
 	end
+	cc.Current=index
 	Cutscene()
 end
 
