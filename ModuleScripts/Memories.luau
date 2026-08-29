@@ -18,6 +18,12 @@ memo.memory = {
 		,desc=` it's useful if i see a logical explanation to connect them\n i could try every combination, but where's the fun in that?`
 		,type="note"
 	},
+	['shemad']={
+		img=""
+		,name="She has a bad temper"
+		,desc=`I should be careful to not make her mad.... \n or  i'll be dead`
+		,type="note"
+	},
 	['feelcomplete']={
 		img=""
 		,name=` i have every combination`
@@ -44,8 +50,8 @@ memo.memory = {
 	},
 	intenttokill={
 		img=""
-		,name="She has an intent to kill me"
-		,desc="i need a way to convince her to leave, but how?"
+		,name="She's going to kill me"
+		,desc="i need a way to convince her to not kill me, but how?"
 		,type=""
 	},
 	sober={
@@ -66,12 +72,7 @@ memo.memory = {
 		,desc="he's the leader of our enemy group, black.\n i wonder how are we an enemy in the first place? "
 		,type=""
 	},
-	kinglie={
-		img=""
-		,name="King's lie"
-		,desc="the reason white and black can't be alliance, he always lie and break promises even if i gave a chance to"
-		,type=""
-	},
+	 
 	herfamily={
 		img=""
 		,name="Her... family?"
@@ -90,25 +91,34 @@ memo.memory = {
 		,desc=`she doesn't deserve all this, i need a way to convince her that their death is not my fault`
 		,type=""
 	},
-	falseaccusation = {
-		img = ""
-		,name = "False accusation"
-		,desc = "she was told that i killed her family?\nwho, told her that? "
-		,type=""
-	}, 
+  
 	whitequeen={
 		img = ""
 		,name='i still see her...'
 		,desc='i thought drinking would make it go away'
 		,type=""
 	},
-	killpattern={
-		img = ""
-		,name=`Black king's kill signature`
-		,desc=`Black king always cuts off his vicims upon killing them, is it some sort of intimidation or punishment?`
-		,type=""
+	 
+	falseaccusation = {
+		img = "",
+		name = "False accusation",
+		desc = "she's told that i killed her family.\nbut... she doesn't trust people easily, even me...\nunless... someone who's she think is trustworthy enough",
+		type = ""
 	},
 
+	killpattern = {
+		img = "",
+		name = "Black King's signature",
+		desc = "thats it, he always cut off his victim's finger. still wondering if its some kind of intimdation or punishment\nand im sure enough he did that to her family",
+		type = ""
+	},
+
+	kinglie = {
+		img = "",
+		name = "King's lie",
+		desc = "it all makes sense. he killed her family, lies about it and blame it on the most reasonable person to blame\n this is my oppurtinity",
+		type = ""
+	},
 	bbbb={
 		img=""
 		,name="gagaga"
@@ -117,15 +127,22 @@ memo.memory = {
 	},
 }
 memo.combination={
-	queenfamily			= {'notokfamily', 'herfamily'},
-	falseaccusation1		= {'wkingkill', 'notokfamily'},
-	falseaccusation2		= {'wkingkill', 'herfamily'},
-	falseaccusation3		= {'wkingkill', 'queenfamily'},
-	killpattern1		= {'blackking', 'herfamily'},
-	killpattern2		= {'blackking', 'queenfamily'},
-	kinglie							= {'falseaccusation', 'blackking'},
+	queenfamily       = {'notokfamily', 'herfamily'},
+
+	falseaccusation1  = {'wkingkill', 'notokfamily'},
+	falseaccusation2  = {'wkingkill', 'herfamily'},
+	falseaccusation3  = {'wkingkill', 'queenfamily'},
+
+	killpattern1      = {'blackking', 'falseaccusation'},  
+	killpattern2      = {'blackking', 'queenfamily'},
+	killpattern3      = {'blackking', 'wkingkill'},
+	killpattern4      = {'blackking', 'herfamily'},
+
+	kinglie1          = {'falseaccusation', 'killpattern'}, 
+	kinglie2          = {'blackking', 'killpattern'},
+	kinglie3          = {'blackking', 'falseaccusation'},
 }
-memo.vip={'combine','feelcomplete','askedevery'}
+
 memo.list={}
 for i,_ in memo.memory do
 	table.insert(memo.list,i)
